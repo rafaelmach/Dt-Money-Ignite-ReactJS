@@ -22,19 +22,19 @@ export const Container = styled.div`
       color: var(--text-body);
       border-radius: 0.25rem;
 
-      &:first-child { // Quando for o primeiro item
+      &:first-child {
+        // Quando for o primeiro item
         color: var(--text-title);
       }
 
-      &.deposit { // Quando eu tiver uma classe deposit ...
+      &.deposit {
+        // Quando eu tiver uma classe deposit ...
         color: var(--green);
       }
 
       &.withdraw {
         color: var(--red);
       }
-
-
     }
   }
 `
