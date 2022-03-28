@@ -57,6 +57,35 @@ export const GlobalStyle = createGlobalStyle`
     cursor: not-allowed;
   }
 
+  .react-modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+
+  // Abaixo: Se a tela estiver com mais de 576px esse vai ser o tamanho máximo do Modal
+  // Se a tela estiver menor que 576px o Modal vai ocupar 100% da tela.
+// width: 100%;
+// max-width: 576px;
+
+  .react-modal-content {
+    width: 100%;
+    max-width: 576px;
+    background: var(--background);
+    padding: 3rem;
+    position: relative;
+    border-radius: 0.25rem;
+  }
+
 
   
 `
