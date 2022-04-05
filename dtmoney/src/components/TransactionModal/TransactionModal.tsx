@@ -1,4 +1,5 @@
-import { FormEvent, useState } from "react"
+import { FormEvent, useContext, useState } from "react"
+import { TransactionsContext } from "../../TransactionsContext"
 import { api } from "../../services/api"
 import Modal from "react-modal"
 import closeImg from "../../assets/close.svg"
@@ -24,27 +25,29 @@ export const TransactionModal = ({
   //  um input do usuário, de um clique ou algo parecido ...
   //  -- Sempre vou utilizar ESTADO
 
+  const { createTransaction } = useContext(TransactionsContext)
+
   const [title, setTitle] = useState("")
-  const [value, setValue] = useState(0)
+  const [amount, setAmount] = useState(0)
   const [category, setCategory] = useState("")
   const [type, setType] = useState("deposit")
-  
 
-  const handleCreateNewTransaction = (event: FormEvent) => {
+  const handleCreateNewTransaction = async (event: FormEvent) => {
     event.preventDefault()
 
-    const data = {
-      title, 
-      value,
+    await createTransaction({
+      title,
+      amount,
       category,
-      type
-    }
+      type,
+    })
 
-    api.post("/transactions", data)
-
-
+    setTitle("")
+    setAmount(0)
+    setCategory("")
+    setType("deposit")
+    onRequestClose()
   }
-
 
   return (
     <Modal
@@ -64,16 +67,16 @@ export const TransactionModal = ({
       <Container onSubmit={handleCreateNewTransaction}>
         <h2>Cadastrar transação</h2>
 
-        <input 
-        placeholder="Título"
-        value={title}
-        onChange={event => setTitle(event.target.value)}
+        <input
+          placeholder="Título"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
         />
-        <input 
-        type="number" 
-        placeholder="Valor"
-        value={value}
-        onChange={event => setValue(Number(event.target.value))}
+        <input
+          type="number"
+          placeholder="Valor"
+          value={amount}
+          onChange={(event) => setAmount(Number(event.target.value))}
         />
 
         <TransactionTypeContainer>
@@ -105,9 +108,9 @@ export const TransactionModal = ({
         </TransactionTypeContainer>
 
         <input
-        placeholder="Categoria"
-        value={category}
-        onChange={event => setCategory(event.target.value)}
+          placeholder="Categoria"
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
         />
 
         <button type="submit">Cadastrar</button>

@@ -10,13 +10,33 @@ interface TransactionType {
   createdAt: string
 }
 
+// interface TransactionInput {
+//   title: string
+//   amount: number
+//   type: string
+//   category: string
+// }
+
+// Tipagem com Omit ... O TransactionInput vai herdar todos os campos do interface - TransactionType, menos
+// menos os campos que eu informar após a vírgula ... nesse exemplo id e createdAt.
+type TransactionInput = Omit<TransactionType, "id" | "createdAt">
+
 interface TransactionsProviderProps {
   children: ReactNode
 }
 
-export const TransactionsContext = createContext<TransactionType[]>([])
+interface TransactionsContextData {
+  transactions: TransactionType[]
+  createTransaction: (transaction: TransactionInput) => Promise<void>
+}
 
-export const TransactionsProvider = ({ children }: TransactionsProviderProps) => {
+export const TransactionsContext = createContext<TransactionsContextData>(
+  {} as TransactionsContextData
+)
+
+export const TransactionsProvider = ({
+  children,
+}: TransactionsProviderProps) => {
   const [transactions, setTransactions] = useState<TransactionType[]>([])
 
   // console.log("TRANSACTIONS", transactions)
@@ -27,9 +47,25 @@ export const TransactionsProvider = ({ children }: TransactionsProviderProps) =>
       .then((response) => setTransactions(response.data.transactions))
   }, [])
 
-  
+  const createTransaction = async (transactionInput: TransactionInput) => {
+    const response = await api.post("/transactions", {
+      ...transactionInput,
+      createdAt: new Date(),
+    })
+
+    const { transaction } = response.data
+    // Dessa forma também dá certo ... const transaction = response.data.transaction
+
+    setTransactions([
+      ...transactions,
+      transaction,
+      // Ou também daria certo ...transactions, response.data.transaction
+      // sem precisar criar a variável transaction
+    ])
+  }
+
   return (
-    <TransactionsContext.Provider value={transactions}>
+    <TransactionsContext.Provider value={{ transactions, createTransaction }}>
       {children}
     </TransactionsContext.Provider>
   )
