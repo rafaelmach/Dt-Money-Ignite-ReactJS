@@ -5,9 +5,9 @@ import { Container } from "./styles"
 
 
 export const TransactionsTable = () => {
-  const data = useContext(TransactionsContext)
+  const { transactions } = useContext(TransactionsContext)
 
-  console.log("DATA", data)
+  // console.log("DATA", data)
 
   return (
     <Container>
@@ -22,8 +22,8 @@ export const TransactionsTable = () => {
         </thead>
 
         <tbody>
-          {data &&
-            data.map((transaction) => {
+          {transactions &&
+            transactions.map((transaction) => {
               return (
                 <tr key={transaction.id}>
                   <td>{transaction.title}</td>
