@@ -1,5 +1,5 @@
-import { FormEvent, useContext, useState } from "react"
-import { TransactionsContext } from "../../TransactionsContext"
+import { FormEvent, useState } from "react"
+import { useTransactions } from "../../hooks/useTransactions"
 import { api } from "../../services/api"
 import Modal from "react-modal"
 import closeImg from "../../assets/close.svg"
@@ -25,7 +25,7 @@ export const TransactionModal = ({
   //  um input do usuário, de um clique ou algo parecido ...
   //  -- Sempre vou utilizar ESTADO
 
-  const { createTransaction } = useContext(TransactionsContext)
+  const { createTransaction } = useTransactions()
 
   const [title, setTitle] = useState("")
   const [amount, setAmount] = useState(0)
